@@ -275,20 +275,6 @@ void mover_select (char tecla,int *l,int *c)
     }
 }
 
-void move_peca (t_tabuleiro *tab,int linha1,int coluna1,int linha2,int coluna2)
-{
-    tab->m[linha2][coluna2]->tipo   = tab->m[linha1][coluna1]->tipo   ;
-    tab->m[linha2][coluna2]->cima   = tab->m[linha1][coluna1]->cima   ;
-    tab->m[linha2][coluna2]->baixo  = tab->m[linha1][coluna1]->baixo  ;
-    tab->m[linha2][coluna2]->dir    = tab->m[linha1][coluna1]->dir    ;
-    tab->m[linha2][coluna2]->esq    = tab->m[linha1][coluna1]->esq    ;
-    tab->m[linha1][coluna1]->tipo   = NADA;
-    tab->m[linha1][coluna1]->cima   = 0;
-    tab->m[linha1][coluna1]->baixo  = 0;
-    tab->m[linha1][coluna1]->dir    = 0;
-    tab->m[linha1][coluna1]->esq    = 0;
-}
-
 void gira_peca (t_tabuleiro *tab,int linha,int coluna)
 {
     int sup = tab->m[linha][coluna]->cima;
@@ -519,8 +505,8 @@ int main ()
                     mover_select (tecla,&linha2,&coluna2);
                     if (tecla == 'j')
                     {
-                        if (tabuleiro.m[linha2][coluna2]->tipo == NADA)
-                            move_peca (&tabuleiro,linha1,coluna1,linha2,coluna2);
+                        if ((tabuleiro.m[linha2][coluna2]->tipo == NADA)||(tabuleiro.m[linha2][coluna2]->tipo == MEXE)||(tabuleiro.m[linha2][coluna2]->tipo == MEXEGIRA))
+                            troca_peca (&tabuleiro,linha1,coluna1,linha2,coluna2);
                         movendo = 0;
                         linha1 = linha2;
                         coluna1 = coluna2;
