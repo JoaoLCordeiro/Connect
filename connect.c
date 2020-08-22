@@ -117,6 +117,20 @@ void imprime_tabuleiro (WINDOW *tab, t_tabuleiro *tabu)
         {
             if (tabu->m[i][j]->tipo != NADA)                     /*verifica se tem peça*/
             {
+                if (tabu->m[i][j]->tipo == NMEXEGIRA)
+                    wattron (tab,COLOR_PAIR(1));
+                else 
+                {   
+                    if (tabu->m[i][j]->tipo == GIRA)
+                        wattron (tab,COLOR_PAIR(2));
+                    else 
+                    {
+                        if (tabu->m[i][j]->tipo == MEXE)
+                            wattron (tab,COLOR_PAIR(3));
+                        else
+                            wattron (tab,COLOR_PAIR(4));
+                    }
+                }    
                 mvwaddch (tab, 1+i*9, 1+j*15 , ACS_ULCORNER);   /*imprime os cantos*/
                 mvwaddch (tab, 1+i*9, 15+j*15, ACS_URCORNER);
                 mvwaddch (tab, 9+i*9, 1+j*15 , ACS_LLCORNER);
@@ -125,10 +139,20 @@ void imprime_tabuleiro (WINDOW *tab, t_tabuleiro *tabu)
                 {
                     if (k==5)
                     {
-                        c = tabu->m[i][j]->esq + '0';
-                        mvwaddch (tab, k+i*9, 1+j*15 , c);
-                        c = tabu->m[i][j]->dir + '0';
-                        mvwaddch (tab, k+i*9, 15+j*15, c);
+                        if (tabu->m[i][j]->esq != 0)
+                        {
+                            c = tabu->m[i][j]->esq + '0';
+                            mvwaddch (tab, k+i*9, 1+j*15 , c);
+                        }
+                        else
+                            mvwaddch (tab, k+i*9, 1+j*15 , ACS_VLINE);
+                        if (tabu->m[i][j]->dir != 0)
+                        {   
+                            c = tabu->m[i][j]->dir + '0';
+                            mvwaddch (tab, k+i*9, 15+j*15, c);
+                        }
+                        else
+                            mvwaddch (tab, k+i*9, 15+j*15, ACS_VLINE);
                     }
                     else
                     {
@@ -140,15 +164,39 @@ void imprime_tabuleiro (WINDOW *tab, t_tabuleiro *tabu)
                 {
                     if (k==8)
                     {
-                        c = tabu->m[i][j]->cima + '0';
-                        mvwaddch (tab, 1+i*9, k+j*15, c);
-                        c = tabu->m[i][j]->baixo + '0';
-                        mvwaddch (tab, 9+i*9, k+j*15, c);
+                        if (tabu->m[i][j]->cima != 0)
+                        {
+                            c = tabu->m[i][j]->cima + '0';
+                            mvwaddch (tab, 1+i*9, k+j*15, c);
+                        }
+                        else
+                            mvwaddch (tab, 1+i*9, k+j*15, ACS_HLINE);
+                        if (tabu->m[i][j]->baixo != 0)
+                        {
+                            c = tabu->m[i][j]->baixo + '0';
+                            mvwaddch (tab, 9+i*9, k+j*15, c);
+                        }
+                        else
+                            mvwaddch (tab, 9+i*9, k+j*15, ACS_HLINE);
                     }
                     else
                     {
                         mvwaddch (tab, 1+i*9, k+j*15, ACS_HLINE);
                         mvwaddch (tab, 9+i*9, k+j*15, ACS_HLINE);
+                    }
+                }
+                if (tabu->m[i][j]->tipo == NMEXEGIRA)
+                    wattroff (tab,COLOR_PAIR(1));
+                else 
+                {
+                    if (tabu->m[i][j]->tipo == GIRA)
+                        wattroff (tab,COLOR_PAIR(2));
+                    else 
+                    {
+                        if (tabu->m[i][j]->tipo == MEXE)
+                            wattroff (tab,COLOR_PAIR(3));
+                        else
+                            wattroff (tab,COLOR_PAIR(4)); 
                     }
                 }
             }
@@ -158,11 +206,106 @@ void imprime_tabuleiro (WINDOW *tab, t_tabuleiro *tabu)
     wrefresh(tab);
 }
 
+void imprime_select (WINDOW *tab,int l,int c)       
+{
+    wattron(tab,COLOR_PAIR(5));
+    mvwaddch (tab, 1+l*9, 1+c*15 , ACS_ULCORNER);
+    mvwaddch (tab, 1+l*9, 15+c*15, ACS_URCORNER);
+    mvwaddch (tab, 9+l*9, 1+c*15 , ACS_LLCORNER);
+    mvwaddch (tab, 9+l*9, 15+c*15, ACS_LRCORNER);
+    mvwaddch (tab, 1+l*9, 2+c*15 , ACS_HLINE);
+    mvwaddch (tab, 9+l*9, 2+c*15 , ACS_HLINE);
+    mvwaddch (tab, 1+l*9, 14+c*15, ACS_HLINE);
+    mvwaddch (tab, 9+l*9, 14+c*15, ACS_HLINE);
+    mvwaddch (tab, 2+l*9, 1+c*15 , ACS_VLINE);
+    mvwaddch (tab, 2+l*9, 15+c*15, ACS_VLINE);
+    mvwaddch (tab, 8+l*9, 1+c*15 , ACS_VLINE);
+    mvwaddch (tab, 8+l*9, 15+c*15, ACS_VLINE);
+    wattroff(tab,COLOR_PAIR(5));
+    wrefresh(tab);
+}
+
+void imprime_select2 (WINDOW *tab,int l,int c)       
+{
+    wattron(tab,COLOR_PAIR(6));
+    mvwaddch (tab, 1+l*9, 1+c*15 , ACS_ULCORNER);
+    mvwaddch (tab, 1+l*9, 15+c*15, ACS_URCORNER);
+    mvwaddch (tab, 9+l*9, 1+c*15 , ACS_LLCORNER);
+    mvwaddch (tab, 9+l*9, 15+c*15, ACS_LRCORNER);
+    mvwaddch (tab, 1+l*9, 2+c*15 , ACS_HLINE);
+    mvwaddch (tab, 9+l*9, 2+c*15 , ACS_HLINE);
+    mvwaddch (tab, 1+l*9, 14+c*15, ACS_HLINE);
+    mvwaddch (tab, 9+l*9, 14+c*15, ACS_HLINE);
+    mvwaddch (tab, 2+l*9, 1+c*15 , ACS_VLINE);
+    mvwaddch (tab, 2+l*9, 15+c*15, ACS_VLINE);
+    mvwaddch (tab, 8+l*9, 1+c*15 , ACS_VLINE);
+    mvwaddch (tab, 8+l*9, 15+c*15, ACS_VLINE);
+    wattroff(tab,COLOR_PAIR(6));
+    wrefresh(tab);
+}
+
+void mover_select (char tecla,int *l,int *c)
+{
+    if (tecla == 'w')
+    {
+        if (*l > 0)
+            *l = *l - 1;
+    }
+    else if (tecla == 'a')
+    {
+        if (*c > 0)
+            *c = *c - 1;
+    }
+    else if (tecla == 's')
+    {
+        if (*l < 3)
+            *l = *l + 1;
+    }
+    else if (tecla == 'd')
+    {
+        if (*c < 3)
+            *c = *c + 1;
+    }
+}
+
+void move_peca (t_tabuleiro *tab,int linha1,int coluna1,int linha2,int coluna2)
+{
+    tab->m[linha2][coluna2]->tipo   = tab->m[linha1][coluna1]->tipo   ;
+    tab->m[linha2][coluna2]->cima   = tab->m[linha1][coluna1]->cima   ;
+    tab->m[linha2][coluna2]->baixo  = tab->m[linha1][coluna1]->baixo  ;
+    tab->m[linha2][coluna2]->dir    = tab->m[linha1][coluna1]->dir    ;
+    tab->m[linha2][coluna2]->esq    = tab->m[linha1][coluna1]->esq    ;
+    tab->m[linha1][coluna1]->tipo   = NADA;
+    tab->m[linha1][coluna1]->cima   = 0;
+    tab->m[linha1][coluna1]->baixo  = 0;
+    tab->m[linha1][coluna1]->dir    = 0;
+    tab->m[linha1][coluna1]->esq    = 0;
+}
+
+void gira_peca (t_tabuleiro *tab,int linha,int coluna)
+{
+    int sup = tab->m[linha][coluna]->cima;
+    tab->m[linha][coluna]->cima  = tab->m[linha][coluna]->esq;
+    tab->m[linha][coluna]->esq   = tab->m[linha][coluna]->baixo; 
+    tab->m[linha][coluna]->baixo = tab->m[linha][coluna]->dir;
+    tab->m[linha][coluna]->dir   = sup;
+}
+
 int main ()
 {
     initscr();
     noecho();
     curs_set(FALSE);
+
+    start_color();
+    init_color(COLOR_BLACK,0,0,0);
+    init_color(10,1000,600 ,0   );
+    init_pair (1,COLOR_RED    ,COLOR_BLACK  );  /*nmexegira*/
+    init_pair (2,COLOR_BLUE   ,COLOR_BLACK  );  /*gira*/
+    init_pair (3,COLOR_GREEN  ,COLOR_BLACK  );  /*mexe*/
+    init_pair (4,10           ,COLOR_BLACK  );  /*mexegira*/
+    init_pair (5,COLOR_MAGENTA,COLOR_WHITE  );  /*select*/
+    init_pair (6,COLOR_WHITE  ,COLOR_MAGENTA);
 
     WINDOW *wtabuleiro = newwin (38,62,0,0);
 
@@ -175,12 +318,38 @@ int main ()
     coluna2 = 0;
     char tecla;
 
+    int movendo = 0;
+
     faz_fase (&tabuleiro);      /*retirado na versão final, apenas para testes*/
     
     while (! (verifica_tabuleiro (&tabuleiro)))
     {
-        imprime_tabuleiro(wtabuleiro,&tabuleiro);
-        tecla = getch(); 
+            if (! movendo)
+            {
+                imprime_tabuleiro(wtabuleiro,&tabuleiro);   
+                imprime_select(wtabuleiro,linha1,coluna1);
+                tecla = getch();
+                mover_select (tecla,&linha1,&coluna1);
+                if ((tecla == 'j')&&((tabuleiro.m[linha1][coluna1]->tipo == MEXE)||(tabuleiro.m[linha1][coluna1]->tipo == MEXEGIRA)))
+                    movendo = 1;
+                if ((tecla == 'k')&&((tabuleiro.m[linha1][coluna1]->tipo == GIRA)||(tabuleiro.m[linha1][coluna1]->tipo == MEXEGIRA)))
+                    gira_peca (&tabuleiro,linha1,coluna1);
+            }
+            else
+            {
+                imprime_tabuleiro(wtabuleiro,&tabuleiro);                  
+                imprime_select(wtabuleiro,linha1,coluna1);
+                imprime_select2(wtabuleiro,linha2,coluna2);
+                tecla = getch();
+                mover_select (tecla,&linha2,&coluna2);
+                if (tecla == 'j')
+                {
+                    if (tabuleiro.m[linha2][coluna2]->tipo == NADA)
+                        move_peca (&tabuleiro,linha1,coluna1,linha2,coluna2);
+                    movendo = 0;
+                }
+            }
     }
+    endwin();
     return 0;
 }
