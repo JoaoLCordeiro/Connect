@@ -402,31 +402,34 @@ void imprime_menu (WINDOW *wtab)
     wattron (wtab,COLOR_PAIR(1));
     mvwprintw (wtab, lin+10, col+6 , "vermelhas ");
     wattroff(wtab,COLOR_PAIR(1));
-    mvwprintw (wtab, lin+10, col+16, "nao mexem, nem giram");
+    mvwprintw (wtab, lin+10, col+16, "nao mexem, nem giram.");
 
     mvwprintw (wtab, lin+11, col   , "Pecas ");
     wattron (wtab,COLOR_PAIR(2));
     mvwprintw (wtab, lin+11, col+6 , "azuis ");
     wattroff(wtab,COLOR_PAIR(2));
-    mvwprintw (wtab, lin+11, col+16, "somente giram");
+    mvwprintw (wtab, lin+11, col+16, "somente giram.");
 
     mvwprintw (wtab, lin+12, col   , "Pecas ");
     wattron (wtab,COLOR_PAIR(3));
     mvwprintw (wtab, lin+12, col+6 , "verdes ");
     wattroff(wtab,COLOR_PAIR(3));
-    mvwprintw (wtab, lin+12, col+16, "somente mexem");
+    mvwprintw (wtab, lin+12, col+16, "somente mexem.");
 
     mvwprintw (wtab, lin+13, col   , "Pecas ");
     wattron (wtab,COLOR_PAIR(4));
     mvwprintw (wtab, lin+13, col+6 , "laranjas ");
     wattroff(wtab,COLOR_PAIR(4));
-    mvwprintw (wtab, lin+13, col+16, "giram e mexem");
+    mvwprintw (wtab, lin+13, col+16, "giram e mexem.");
 
     mvwprintw (wtab, lin+15, col, "Conecte todos os pares de numeros iguais");
     mvwprintw (wtab, lin+16, col, "e conclua o nível!                      ");
 
-    mvwprintw (wtab, lin+18, col, "Aperte espaco para comecar!");
-    mvwprintw (wtab, lin+19, col, "Aperte q para fechar o jogo.");
+    mvwprintw (wtab, lin+18, col, "Controles: j para mover pecas.");
+    mvwprintw (wtab, lin+19, col, "           k para girar pecas.");
+
+    mvwprintw (wtab, lin+21, col, "Aperte espaco para comecar!");
+    mvwprintw (wtab, lin+22, col, "Aperte q para fechar o jogo.");
     wrefresh(wtab);
 }
 
